@@ -4,7 +4,7 @@ HTTP/3 to HTTP/1.1 proxy server
 
 ## Build
 
-To build run `go build main.go`
+To build run `go build`
 
 ## Config File
 
