@@ -12,6 +12,7 @@ type Conf struct {
 	ServerName string `json:"ServerName"`
 	CertPath   string `json:"CertPath"`
 	KeyPath    string `json:"KeyPath"`
+	Scheme     string `json:"Scheme"`
 }
 
 func LoadConfig() Conf {

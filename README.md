@@ -17,3 +17,5 @@ To build run `go build`
 * CertPath: Specifies the path to the certificate file for the HTTP/3 server.
 
 * KeyPath: Specifies the path to the key file for the HTTP/3 server.
+
+* Scheme: Specifies the Scheme of the HTTP/1.1 server.
