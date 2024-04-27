@@ -1,0 +1,7 @@
+{
+    "H3Addr":"0.0.0.0:443",
+	"H1Addr":"127.0.0.1:80",
+	"ServerName":"example.com",
+	"CertPath":"cert.pem",
+	"KeyPath":"key.pem"
+}
