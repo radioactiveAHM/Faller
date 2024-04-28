@@ -59,7 +59,13 @@ func H3Handler(H1Addr string, H3Addr string, scheme string) http.Handler {
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		}
 		h1Client := &http.Client{Transport: tr}
-		h1req := http.Request{Method: r.Method, URL: &url.URL{Scheme: scheme, Host: H1Addr, Path: r.URL.Path}, Host: r.Host}
+		h1req := http.Request{Method: r.Method, URL: &url.URL{Scheme: scheme, Host: H1Addr, Path: r.URL.Path}}
+		// Set H3 headers to H1 Agent
+		h1Header := http.Header{}
+		for h1, v1 := range r.Header {
+			h1Header.Add(h1, strings.Join(v1, ";"))
+		}
+		h1req.Header = h1Header
 		h1req.Body = r.Body
 		response, h1_err := h1Client.Do(&h1req)
 		if h1_err != nil {
