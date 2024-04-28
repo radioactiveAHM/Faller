@@ -19,3 +19,8 @@ To build run `go build`
 * KeyPath: Specifies the path to the key file for the HTTP/3 server.
 
 * Scheme: Specifies the Scheme of the HTTP/1.1 server.
+
+## Tips
+
+* To inform the browser that your web server supports HTTP/3, you should include the following Alt-Svc HTTP header in your server’s response: `Alt-Svc: h3=":443", h3-29=":443"` This header indicates that HTTP/3 is available on UDP port 443 at the same host name that was used to retrieve this response. By including this header, you allow clients to establish QUIC connections to that destination and continue communicating with the origin using HTTP/3 instead of the initial HTTP version.
+[Link-to-article](https://www.ietf.org/archive/id/draft-duke-httpbis-quic-version-alt-svc-03.html)
