@@ -35,7 +35,7 @@ func main() {
 	// Handler refers to incoming HTTP request handler
 	server := http3.Server{
 		Addr:       h3addr,
-		QuicConfig: nil,
+		QUICConfig: nil,
 		TLSConfig:  &tconf,
 		Handler:    H3Handler(h1addr, h3addr, scheme),
 	}
@@ -50,6 +50,7 @@ func main() {
 	}
 }
 
+// Handle HTTP Request
 func H3Handler(H1Addr string, H3Addr string, scheme string) http.Handler {
 	mux := http.NewServeMux()
 
