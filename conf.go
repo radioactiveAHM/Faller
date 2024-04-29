@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"os"
 )
 
@@ -18,15 +18,13 @@ type Conf struct {
 func LoadConfig() Conf {
 	cfile, cfile_err := os.ReadFile("conf.json")
 	if cfile_err != nil {
-		fmt.Println(cfile_err.Error())
-		os.Exit(1)
+		log.Fatalln(cfile_err.Error())
 	}
 
 	conf := Conf{}
 	conf_err := json.Unmarshal(cfile, &conf)
 	if conf_err != nil {
-		fmt.Println(conf_err.Error())
-		os.Exit(1)
+		log.Fatalln(conf_err.Error())
 	}
 
 	return conf
