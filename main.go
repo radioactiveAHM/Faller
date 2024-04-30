@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strings"
 
 	"github.com/quic-go/quic-go/http3"
 )
@@ -62,6 +61,8 @@ func H3Handler(H3Addr string, destinations []Destination) http.Handler {
 			h1req := http.Request{Method: r.Method, URL: &url.URL{Scheme: dest.Scheme, Host: dest.Addr, Path: r.URL.Path}}
 			// Set H3 request header to h1 request header
 			h1req.Header = r.Header
+			// Set H1 Extra Headers from config
+			MergeMap(h1req.Header, dest.H1ReqHeaders)
 			// Set H3 request body to h1 request body
 			h1req.Body = r.Body
 
@@ -73,11 +74,11 @@ func H3Handler(H3Addr string, destinations []Destination) http.Handler {
 				return
 			}
 
-			// Set HTTP/3 Response
+			// Set H3 Response Headers
 			h3Headers := w.Header()
-			for h, v := range response.Header {
-				h3Headers.Add(h, strings.Join(v, ","))
-			}
+			MergeMap(h3Headers, response.Header)
+			// Set H3 Extra Headers from config
+			MergeMap(h3Headers, dest.H3RespHeaders)
 			defer response.Body.Close()
 			// Write H1 Response StatusCode to H3  Response StatusCode
 			w.WriteHeader(response.StatusCode)

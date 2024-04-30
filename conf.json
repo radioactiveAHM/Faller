@@ -1,14 +1,19 @@
 {
-    "H3Addr":"0.0.0.0:443",
-	"ServerName":"example.com",
-	"CertPath":"cert.pem",
-	"KeyPath":"key.pem",
-	"Destinations":[
+	"H3Addr": "0.0.0.0:443",
+	"ServerName": "example.com",
+	"CertPath": "cert.pem",
+	"KeyPath": "key.pem",
+	"Destinations": [
 		{
-			"Name":"NGINX",
-			"Addr":"127.0.0.1:80",
-			"Scheme":"http",
-			"Path":"/*"
+			"Name": "NGINX",
+			"Addr": "127.0.0.1:80",
+			"Scheme": "http",
+			"Path": "/*",
+			"H3RespHeaders": {
+				"Server": ["NGINX"]
+			},
+			"H1ReqHeaders": {
+			}
 		}
 	]
 }

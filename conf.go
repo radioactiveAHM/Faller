@@ -7,10 +7,12 @@ import (
 )
 
 type Destination struct {
-	Name   string `json:"Name"`
-	Addr   string `json:"Addr"`
-	Scheme string `json:"Scheme"`
-	Path   string `json:"Path"`
+	Name          string              `json:"Name"`
+	Addr          string              `json:"Addr"`
+	Scheme        string              `json:"Scheme"`
+	Path          string              `json:"Path"`
+	H3RespHeaders map[string][]string `json:"H3RespHeaders"`
+	H1ReqHeaders  map[string][]string `json:"H1ReqHeaders"`
 }
 
 type Conf struct {
