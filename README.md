@@ -4,7 +4,8 @@ HTTP/3 to HTTP/1.1 proxy server
 
 ## Roadmap
 
-- [ ] Multiple path handler
+- [x] Multiple Path Handler
+- [ ] Enabling Custom HTTP Headers for HTTP/3 Responses and HTTP/1 Requests
 
 ## Build
 
