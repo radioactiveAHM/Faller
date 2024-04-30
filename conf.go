@@ -6,13 +6,19 @@ import (
 	"os"
 )
 
+type Destination struct {
+	Name   string `json:"Name"`
+	Addr   string `json:"Addr"`
+	Scheme string `json:"Scheme"`
+	Path   string `json:"Path"`
+}
+
 type Conf struct {
-	H3Addr     string `json:"H3Addr"`
-	H1Addr     string `json:"H1Addr"`
-	ServerName string `json:"ServerName"`
-	CertPath   string `json:"CertPath"`
-	KeyPath    string `json:"KeyPath"`
-	Scheme     string `json:"Scheme"`
+	H3Addr       string        `json:"H3Addr"`
+	ServerName   string        `json:"ServerName"`
+	CertPath     string        `json:"CertPath"`
+	KeyPath      string        `json:"KeyPath"`
+	Destinations []Destination `json:"Destinations"`
 }
 
 func LoadConfig() Conf {
