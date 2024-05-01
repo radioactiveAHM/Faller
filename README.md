@@ -1,6 +1,10 @@
 # Faller
 
-HTTP/3 to HTTP/1.1 proxy server
+Faller is an HTTP/3 proxy server that allows you to proxy HTTP/3 requests to other web applications. Similar to NGINX’s reverse proxy functionality, Faller supports multipath configuration and manual HTTP header settings. Let’s break down its key features:
+
+1. HTTP/3 Proxy: Faller acts as an intermediary between clients and web servers, forwarding HTTP/3 requests to the appropriate destination. It ensures secure and efficient communication.
+2. Multipath Configuration: Faller allows you to configure multiple paths for routing requests. This flexibility enables load balancing and efficient distribution of traffic across different endpoints.
+3. Manual HTTP Header Setting: You can customize HTTP headers within Faller. This feature is useful for scenarios where specific headers need modification or addition.
 
 ## Roadmap
 
