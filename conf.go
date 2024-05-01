@@ -6,6 +6,19 @@ import (
 	"os"
 )
 
+type Quic struct {
+	HandshakeIdleTimeout           byte   `json:"HandshakeIdleTimeout"`
+	MaxIdleTimeout                 byte   `json:"MaxIdleTimeout"`
+	InitialStreamReceiveWindow     uint64 `json:"InitialStreamReceiveWindow"`
+	MaxStreamReceiveWindow         uint64 `json:"MaxStreamReceiveWindow"`
+	InitialConnectionReceiveWindow uint64 `json:"InitialConnectionReceiveWindow"`
+	MaxConnectionReceiveWindow     uint64 `json:"MaxConnectionReceiveWindow"`
+	MaxIncomingStreams             int64  `json:"MaxIncomingStreams"`
+	MaxIncomingUniStreams          int64  `json:"MaxIncomingUniStreams"`
+	DisablePathMTUDiscovery        bool   `json:"DisablePathMTUDiscovery"`
+	Allow0RTT                      bool   `json:"Allow0RTT"`
+}
+
 type Destination struct {
 	Name          string              `json:"Name"`
 	Addr          string              `json:"Addr"`
@@ -21,6 +34,7 @@ type Conf struct {
 	CertPath     string        `json:"CertPath"`
 	KeyPath      string        `json:"KeyPath"`
 	Destinations []Destination `json:"Destinations"`
+	QUIC         Quic          `json:"QUIC"`
 }
 
 func LoadConfig() Conf {

@@ -7,7 +7,9 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"time"
 
+	"github.com/quic-go/quic-go"
 	"github.com/quic-go/quic-go/http3"
 )
 
@@ -26,13 +28,26 @@ func main() {
 
 	// Generate TLS config for HTTP/3 server
 	tconf := tls.Config{Rand: rand.Reader, ServerName: servername, NextProtos: []string{"h3", "h2", "http/1.1"}}
+	// Generate QUIC config
+	qconf := quic.Config{
+		HandshakeIdleTimeout:           time.Duration(c.QUIC.HandshakeIdleTimeout) * time.Second,
+		MaxIdleTimeout:                 time.Duration(c.QUIC.MaxIdleTimeout) * time.Second,
+		InitialStreamReceiveWindow:     c.QUIC.InitialStreamReceiveWindow,
+		MaxStreamReceiveWindow:         c.QUIC.MaxStreamReceiveWindow,
+		InitialConnectionReceiveWindow: c.QUIC.InitialConnectionReceiveWindow,
+		MaxConnectionReceiveWindow:     c.QUIC.MaxConnectionReceiveWindow,
+		MaxIncomingStreams:             c.QUIC.MaxIncomingStreams,
+		MaxIncomingUniStreams:          c.QUIC.MaxIncomingUniStreams,
+		DisablePathMTUDiscovery:        c.QUIC.DisablePathMTUDiscovery,
+		Allow0RTT:                      c.QUIC.Allow0RTT,
+	}
 
 	// HTTP/3 Server
 	// "QuicConfig: nil" refers to the default configuration for QUIC
 	// Handler refers to incoming HTTP request handler
 	server := http3.Server{
 		Addr:       h3addr,
-		QUICConfig: nil,
+		QUICConfig: &qconf,
 		TLSConfig:  &tconf,
 		Handler:    H3Handler(h3addr, destination),
 	}

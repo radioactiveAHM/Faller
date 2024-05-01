@@ -12,8 +12,19 @@
 			"H3RespHeaders": {
 				"Server": ["NGINX"]
 			},
-			"H1ReqHeaders": {
-			}
+			"H1ReqHeaders": {}
 		}
-	]
+	],
+	"QUIC": {
+		"HandshakeIdleTimeout": 5,
+		"MaxIdleTimeout": 30,
+		"InitialStreamReceiveWindow": 524288,
+		"MaxStreamReceiveWindow": 6291456,
+		"InitialConnectionReceiveWindow": 524288,
+		"MaxConnectionReceiveWindow": 15728640,
+		"MaxIncomingStreams": 100,
+		"MaxIncomingUniStreams": 100,
+		"DisablePathMTUDiscovery": false,
+		"Allow0RTT": false
+	}
 }
