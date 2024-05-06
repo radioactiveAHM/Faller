@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"io"
 	"log"
+	mrand "math/rand"
 	"net/http"
 	"net/url"
 	"time"
@@ -23,6 +24,7 @@ func main() {
 	cert := c.CertPath
 	key := c.KeyPath
 	destination := c.Destinations
+	trace := c.Trace
 
 	log.Println("server listening on " + h3addr)
 
@@ -49,7 +51,7 @@ func main() {
 		Addr:       h3addr,
 		QUICConfig: &qconf,
 		TLSConfig:  &tconf,
-		Handler:    H3Handler(h3addr, destination),
+		Handler:    H3Handler(h3addr, destination, trace),
 	}
 
 	defer server.Close()
@@ -59,12 +61,15 @@ func main() {
 }
 
 // Handle HTTP Request
-func H3Handler(H3Addr string, destinations []Destination) http.Handler {
+func H3Handler(H3Addr string, destinations []Destination, trace bool) http.Handler {
 	mux := http.NewServeMux()
 
 	// Register multiple paths
 	for _, dest := range destinations {
 		mux.HandleFunc(dest.Path, func(w http.ResponseWriter, r *http.Request) {
+			// ID for Tracing
+			id := mrand.Intn(65535)
+
 			// Create an HTTP client on TCP socket
 			// {InsecureSkipVerify: true} is required if H1 server Scheme is HTTPS and using self signed certificate
 			tr := &http.Transport{
@@ -72,7 +77,13 @@ func H3Handler(H3Addr string, destinations []Destination) http.Handler {
 			}
 			h1Client := &http.Client{Transport: tr}
 
+			// Trace HTTP/3 incoming request
+			if trace {
+				TraceLogReq(r.Method, r.URL.Path, r.Proto, r.RemoteAddr, id)
+			}
+
 			// Generate HTTP/1.1 request
+
 			h1req := http.Request{Method: r.Method, URL: &url.URL{Scheme: dest.Scheme, Host: dest.Addr, Path: r.URL.Path}}
 			// Set H3 request header to h1 request header
 			h1req.Header = r.Header
@@ -87,6 +98,11 @@ func H3Handler(H3Addr string, destinations []Destination) http.Handler {
 				log.Println(h1_err.Error())
 				w.WriteHeader(500)
 				return
+			}
+
+			// Trace HTTP/1.1 incoming response
+			if trace {
+				TraceLogResp(response.Proto, response.StatusCode, id)
 			}
 
 			// Set H3 Response Headers

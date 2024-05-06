@@ -26,5 +26,6 @@
 		"MaxIncomingUniStreams": 100,
 		"DisablePathMTUDiscovery": false,
 		"Allow0RTT": false
-	}
+	},
+	"Trace":false
 }

@@ -35,6 +35,7 @@ type Conf struct {
 	KeyPath      string        `json:"KeyPath"`
 	Destinations []Destination `json:"Destinations"`
 	QUIC         Quic          `json:"QUIC"`
+	Trace        bool          `json:"Trace"`
 }
 
 func LoadConfig() Conf {
