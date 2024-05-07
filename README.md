@@ -15,6 +15,7 @@ Faller is an HTTP/3 proxy server that allows you to proxy HTTP/3 requests to oth
 - [x] Configuration options for QUIC in config file
 - [x] Tracing option
 - [x] Logging to file option
+- [ ] Multi Domain
 
 ## Build
 
