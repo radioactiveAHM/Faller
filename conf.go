@@ -28,6 +28,11 @@ type Destination struct {
 	H1ReqHeaders  map[string][]string `json:"H1ReqHeaders"`
 }
 
+type FL struct {
+	Enable bool   `json:"Enable"`
+	Level  string `json:"Level"`
+}
+
 type Conf struct {
 	H3Addr       string        `json:"H3Addr"`
 	ServerName   string        `json:"ServerName"`
@@ -36,6 +41,7 @@ type Conf struct {
 	Destinations []Destination `json:"Destinations"`
 	QUIC         Quic          `json:"QUIC"`
 	Trace        bool          `json:"Trace"`
+	FileLog      FL            `json:"FileLog"`
 }
 
 func LoadConfig() Conf {

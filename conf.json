@@ -27,5 +27,6 @@
 		"DisablePathMTUDiscovery": false,
 		"Allow0RTT": false
 	},
-	"Trace":false
+	"Trace": false,
+	"FileLog": { "Enable": true, "Level": "Debug" }
 }

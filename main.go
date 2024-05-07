@@ -25,6 +25,7 @@ func main() {
 	key := c.KeyPath
 	destination := c.Destinations
 	trace := c.Trace
+	filelog := c.FileLog
 
 	log.Println("server listening on " + h3addr)
 
@@ -45,13 +46,17 @@ func main() {
 	}
 
 	// HTTP/3 Server
-	// "QuicConfig: nil" refers to the default configuration for QUIC
 	// Handler refers to incoming HTTP request handler
 	server := http3.Server{
 		Addr:       h3addr,
 		QUICConfig: &qconf,
 		TLSConfig:  &tconf,
 		Handler:    H3Handler(h3addr, destination, trace),
+	}
+
+	// Logging to file setup
+	if filelog.Enable {
+		LogFile(&server, filelog.Level)
 	}
 
 	defer server.Close()
