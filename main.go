@@ -8,6 +8,7 @@ import (
 	mrand "math/rand"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/quic-go/quic-go"
@@ -20,9 +21,7 @@ func main() {
 	c := LoadConfig()
 
 	h3addr := c.H3Addr
-	servername := c.ServerName
-	cert := c.CertPath
-	key := c.KeyPath
+	domains := c.TLS
 	destination := c.Destinations
 	trace := c.Trace
 	filelog := c.FileLog
@@ -30,7 +29,41 @@ func main() {
 	log.Println("server listening on " + h3addr)
 
 	// Generate TLS config for HTTP/3 server
-	tconf := tls.Config{Rand: rand.Reader, ServerName: servername, NextProtos: []string{"h3", "h2", "http/1.1"}}
+	// Config for multiple Domains
+	tconf := tls.Config{
+		GetConfigForClient: func(chi *tls.ClientHelloInfo) (*tls.Config, error) {
+			if chi.ServerName != "" {
+				for _, domain := range domains.Domains {
+					if strings.Contains(domain.ServerName, chi.ServerName) {
+						// Load Certificate
+						cert, cert_e := tls.LoadX509KeyPair(
+							domain.CertPath,
+							domain.KeyPath,
+						)
+						if cert_e != nil {
+							log.Fatalln(cert_e.Error())
+						}
+						return &tls.Config{
+							Rand:         rand.Reader,
+							NextProtos:   []string{"h3", "h2", "http/1.1"},
+							Certificates: []tls.Certificate{cert},
+						}, nil
+					}
+				}
+			}
+			// If no match found return default Certificate
+			// No server name support or using ip
+			cert, cert_e := tls.LoadX509KeyPair(domains.Default.CertPath, domains.Default.KeyPath)
+			if cert_e != nil {
+				log.Fatalln(cert_e.Error())
+			}
+			return &tls.Config{
+				Rand:         rand.Reader,
+				NextProtos:   []string{"h3", "h2", "http/1.1"},
+				Certificates: []tls.Certificate{cert},
+			}, nil
+		},
+	}
 	// Generate QUIC config
 	qconf := quic.Config{
 		HandshakeIdleTimeout:           time.Duration(c.QUIC.HandshakeIdleTimeout) * time.Second,
@@ -62,7 +95,7 @@ func main() {
 	defer server.Close()
 
 	// Start Listening
-	log.Fatalln(server.ListenAndServeTLS(cert, key))
+	log.Fatalln(server.ListenAndServe())
 }
 
 // Handle HTTP Request

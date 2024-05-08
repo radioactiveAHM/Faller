@@ -1,8 +1,18 @@
 {
 	"H3Addr": "0.0.0.0:443",
-	"ServerName": "example.com",
-	"CertPath": "cert.pem",
-	"KeyPath": "key.pem",
+	"TLS": {
+		"Default": {
+			"CertPath": "cert.pem",
+			"KeyPath": "key.pem"
+		},
+		"Domains": [
+			{
+				"ServerName": "example.com",
+				"CertPath": "cert.pem",
+				"KeyPath": "key.pem"
+			}
+		]
+	},
 	"Destinations": [
 		{
 			"Name": "NGINX",

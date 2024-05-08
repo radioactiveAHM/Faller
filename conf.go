@@ -35,9 +35,7 @@ type FL struct {
 
 type Conf struct {
 	H3Addr       string        `json:"H3Addr"`
-	ServerName   string        `json:"ServerName"`
-	CertPath     string        `json:"CertPath"`
-	KeyPath      string        `json:"KeyPath"`
+	TLS          TlsConf       `json:"TLS"`
 	Destinations []Destination `json:"Destinations"`
 	QUIC         Quic          `json:"QUIC"`
 	Trace        bool          `json:"Trace"`
