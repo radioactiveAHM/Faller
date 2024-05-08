@@ -1,9 +1,10 @@
 package main
 
 type Domains struct {
-	ServerName string `json:"ServerName"`
-	CertPath   string `json:"CertPath"`
-	KeyPath    string `json:"KeyPath"`
+	ServerName        string `json:"ServerName"`
+	CertPath          string `json:"CertPath"`
+	KeyPath           string `json:"KeyPath"`
+	SubDomainsSupport bool   `json:"SubDomainsSupport"`
 }
 
 type DefaultTls struct {

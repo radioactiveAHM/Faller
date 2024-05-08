@@ -9,7 +9,8 @@
 			{
 				"ServerName": "example.com",
 				"CertPath": "cert.pem",
-				"KeyPath": "key.pem"
+				"KeyPath": "key.pem",
+				"SubDomainsSupport": false
 			}
 		]
 	},

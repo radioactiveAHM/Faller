@@ -8,7 +8,6 @@ import (
 	mrand "math/rand"
 	"net/http"
 	"net/url"
-	"strings"
 	"time"
 
 	"github.com/quic-go/quic-go"
@@ -32,22 +31,57 @@ func main() {
 	// Config for multiple Domains
 	tconf := tls.Config{
 		GetConfigForClient: func(chi *tls.ClientHelloInfo) (*tls.Config, error) {
-			if chi.ServerName != "" {
+			sni := Domainy{}
+			sni_e := sni.From(chi.ServerName)
+			if sni_e == nil {
 				for _, domain := range domains.Domains {
-					if strings.Contains(domain.ServerName, chi.ServerName) {
-						// Load Certificate
-						cert, cert_e := tls.LoadX509KeyPair(
-							domain.CertPath,
-							domain.KeyPath,
-						)
-						if cert_e != nil {
-							log.Fatalln(cert_e.Error())
+					if domain.SubDomainsSupport {
+						// Certificate covers all sub-domains
+						sn := Domainy{}
+						sn_e := sn.From(domain.ServerName)
+						if sn_e != nil {
+							log.Println("Invalid server name from config")
+							continue
 						}
-						return &tls.Config{
-							Rand:         rand.Reader,
-							NextProtos:   []string{"h3", "h2", "http/1.1"},
-							Certificates: []tls.Certificate{cert},
-						}, nil
+						if sni.DomainName == sn.DomainName {
+							// Load Certificate
+							cert, cert_e := tls.LoadX509KeyPair(
+								domain.CertPath,
+								domain.KeyPath,
+							)
+							if cert_e != nil {
+								log.Fatalln(cert_e.Error())
+							}
+							return &tls.Config{
+								Rand:         rand.Reader,
+								NextProtos:   []string{"h3", "h2", "http/1.1"},
+								Certificates: []tls.Certificate{cert},
+							}, nil
+						}
+					} else {
+						// DO exact match
+						sn := Domainy{}
+						sn_e := sn.From(domain.ServerName)
+						if sn_e != nil {
+							log.Println("Invalid server name from config")
+							continue
+						}
+						if sni.Subdomain == sn.Subdomain && sni.DomainName == sn.DomainName {
+							// Load Certificate
+							cert, cert_e := tls.LoadX509KeyPair(
+								domain.CertPath,
+								domain.KeyPath,
+							)
+							if cert_e != nil {
+								log.Fatalln(cert_e.Error())
+							}
+							return &tls.Config{
+								Rand:         rand.Reader,
+								NextProtos:   []string{"h3", "h2", "http/1.1"},
+								Certificates: []tls.Certificate{cert},
+							}, nil
+
+						}
 					}
 				}
 			}
