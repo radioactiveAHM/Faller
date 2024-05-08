@@ -27,11 +27,17 @@ To build stripped run `go build -ldflags "-w -s"` in project directory
 
 * H3Addr: Refers to the address and port of the HTTP/3 server.
 
-* ServerName: Your domain address that will be used during the QUIC handshake.
+* TLS: Tls configuration
 
-* CertPath: Specifies the path to the certificate file for the HTTP/3 server.
+    - Default: Certificate for clients without SNI or using IP
+        - CertPath: Specifies the path to the certificate.
+        - KeyPath: Specifies the path to the key.
 
-* KeyPath: Specifies the path to the key file for the HTTP/3 server.
+    - Domains (optional): List of server names with specified certificate.
+        - ServerName: Ensure that the server name matches the client SNI (Server Name Indication) to return the specified certificate. If all matches failed the Default certificate is returned.
+        - CertPath: Specifies the path to the certificate.
+        - KeyPath: Specifies the path to the key.
+        - SubDomainsSupport: This feature indicates whether the certificate covers all subdomains.
 
 * Destinations: Configuring HTTP Path and HTTP/1 Server: Setting Up Multiple Paths to Proxy Requests to Different HTTP/1 Servers
 
