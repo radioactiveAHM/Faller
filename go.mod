@@ -4,7 +4,7 @@ go 1.22.4
 
 require (
 	github.com/fatih/color v1.17.0
-	github.com/quic-go/quic-go v0.45.0
+	github.com/quic-go/quic-go v0.45.1
 )
 
 require (

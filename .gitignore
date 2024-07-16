@@ -1,4 +1,2 @@
-faller.exe
-key.pem
-cert.pem
-/build
+dist
+.goreleaser.yaml
