@@ -26,9 +26,3 @@ jobs:
         
     - name: Build
       run: go build
-
-    - name: Upload
-      uses: actions/upload-artifact@v4
-      with:
-        name: Faller-v0.1.0
-        path: faller
